@@ -59,41 +59,6 @@
 }
 
 /* Custom styles for BeeContent */
-.prose {
-  @apply max-w-none;
-}
-
-.prose h1 {
-  @apply text-3xl font-bold mb-4;
-}
-
-.prose h2 {
-  @apply text-2xl font-semibold mb-3;
-}
-
-.prose h3 {
-  @apply text-xl font-medium mb-2;
-}
-
-.prose p {
-  @apply mb-4 leading-relaxed;
-}
-
-.prose ul {
-  @apply list-disc pl-6 mb-4;
-}
-
-.prose ol {
-  @apply list-decimal pl-6 mb-4;
-}
-
-.prose blockquote {
-  @apply border-l-4 border-gray-300 pl-4 italic mb-4;
-}
-
-.prose img {
-  @apply rounded-lg shadow-md;
-}
 
 /* Floating button styles */
 .floating-button {
