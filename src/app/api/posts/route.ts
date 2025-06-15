@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { generateSlug } from '@/lib/utils'
-import { PostStatus } from '@prisma/client'
+import { PostStatus } from '@/types'
 
 export async function GET(request: NextRequest) {
   try {

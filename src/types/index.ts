@@ -1,6 +1,10 @@
-import { Post, User, PostStatus, Role } from '@prisma/client'
+import { Post, User } from '@prisma/client'
 
-export type { Post, User, PostStatus, Role }
+export type { Post, User }
+
+// Define PostStatus and Role manually since they're not enums in the schema
+export type PostStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+export type Role = 'ADMIN' | 'EDITOR' | 'AUTHOR'
 
 export interface PostWithAuthor extends Post {
   author: User
