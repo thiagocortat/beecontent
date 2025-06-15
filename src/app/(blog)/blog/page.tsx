@@ -3,6 +3,7 @@ import { Calendar, User, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { marked } from 'marked'
 
 interface BlogPost {
   id: string
@@ -54,7 +55,9 @@ export default async function BlogPage() {
   }
   
   const truncateContent = (content: string, maxLength: number = 150) => {
-    const textContent = content.replace(/<[^>]*>/g, '')
+    // Convert markdown to HTML first, then strip HTML tags
+    const htmlContent = marked.parse(content) as string
+    const textContent = htmlContent.replace(/<[^>]*>/g, '')
     if (textContent.length <= maxLength) return textContent
     return textContent.substring(0, maxLength) + '...'
   }

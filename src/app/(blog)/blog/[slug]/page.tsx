@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { marked } from 'marked'
 
 interface BlogPost {
   id: string
@@ -144,7 +145,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="bg-white rounded-lg shadow-sm p-8">
           <div 
             className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: marked.parse(post.content) as string }}
           />
         </div>
         
