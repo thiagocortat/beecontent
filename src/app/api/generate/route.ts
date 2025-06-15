@@ -4,10 +4,6 @@ import { authOptions } from '@/lib/auth'
 import Groq from 'groq-sdk'
 import { generateSlug } from '@/lib/utils'
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-})
-
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -25,6 +21,10 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    })
 
     const { title, tone = 'professional', length = 'medium' } = await request.json()
 
