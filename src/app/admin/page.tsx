@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { Users, Settings, Database, Shield } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
@@ -17,6 +18,8 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
   const [newUserPassword, setNewUserPassword] = useState('')
+  const [selectedHotelId, setSelectedHotelId] = useState('')
+  const [hotels, setHotels] = useState<Array<{id: number, name: string, city: string, state: string, country: string}>>([])
   const [stats, setStats] = useState({
     totalPosts: 0,
     totalUsers: 0,
@@ -37,8 +40,9 @@ export default function AdminPage() {
       return
     }
 
-    // Carregar estatísticas
+    // Carregar estatísticas e hotéis
     loadStats()
+    loadHotels()
   }, [session, status, router])
 
   const loadStats = async () => {
@@ -50,6 +54,23 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error)
+    }
+  }
+
+  const loadHotels = async () => {
+    try {
+      const response = await fetch('/api/hotels')
+      if (response.ok) {
+        const data = await response.json()
+        setHotels(data)
+      }
+    } catch (error) {
+      console.error('Erro ao carregar hotéis:', error)
+      toast({
+        title: 'Erro ao carregar hotéis',
+        description: 'Não foi possível carregar a lista de hotéis',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -66,6 +87,7 @@ export default function AdminPage() {
         body: JSON.stringify({
           email: newUserEmail,
           password: newUserPassword,
+          hotelId: parseInt(selectedHotelId),
         }),
       })
 
@@ -76,6 +98,7 @@ export default function AdminPage() {
         })
         setNewUserEmail('')
         setNewUserPassword('')
+        setSelectedHotelId('')
         // Recarregar estatísticas após criar usuário
         loadStats()
       } else {
@@ -191,7 +214,22 @@ export default function AdminPage() {
                 minLength={6}
               />
             </div>
-            <Button type="submit" disabled={isLoading}>
+            <div className="space-y-2">
+              <Label htmlFor="hotel">Hotel</Label>
+              <Select value={selectedHotelId} onValueChange={setSelectedHotelId} required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um hotel" />
+                </SelectTrigger>
+                <SelectContent>
+                  {hotels.map((hotel) => (
+                    <SelectItem key={hotel.id} value={hotel.id.toString()}>
+                      {hotel.name} - {hotel.city}, {hotel.state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button type="submit" disabled={isLoading || !selectedHotelId}>
               {isLoading ? 'Criando...' : 'Criar Usuário'}
             </Button>
           </form>
