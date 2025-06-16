@@ -173,9 +173,9 @@ export default function EditorPage() {
         setPostData(prev => ({
           ...prev,
           content: result.content,
-          excerpt: result.excerpt || prev.excerpt,
-          metaDescription: result.metaDescription || prev.metaDescription,
-          keywords: result.keywords || prev.keywords
+          excerpt: result.excerpt || '',
+          metaDescription: result.metaDescription || '',
+          keywords: result.keywords || ''
         }))
         
         toast({
@@ -201,16 +201,19 @@ export default function EditorPage() {
     }
   }
 
-  const handleSelectSuggestion = (title: string, content: string) => {
+  const handleSelectSuggestion = (title: string, content: string, excerpt?: string, metaDescription?: string, keywords?: string) => {
     setPostData(prev => ({
       ...prev,
       title,
-      content
+      content,
+      excerpt: excerpt || '',
+      metaDescription: metaDescription || '',
+      keywords: keywords || ''
     }))
     
     toast({
       title: 'Sucesso',
-      description: 'Título e conteúdo preenchidos automaticamente!',
+      description: 'Artigo completo gerado com sucesso! Título, conteúdo, resumo, meta descrição e palavras-chave foram preenchidos.',
     })
   }
 

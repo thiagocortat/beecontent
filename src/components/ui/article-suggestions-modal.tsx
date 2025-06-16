@@ -25,7 +25,7 @@ interface ArticleSuggestion {
 }
 
 interface ArticleSuggestionsModalProps {
-  onSelectSuggestion: (title: string, content: string) => void
+  onSelectSuggestion: (title: string, content: string, excerpt?: string, metaDescription?: string, keywords?: string) => void
   disabled?: boolean
 }
 
@@ -296,7 +296,7 @@ export function ArticleSuggestionsModal({ onSelectSuggestion, disabled }: Articl
 
       if (response.ok) {
         const result = await response.json()
-        onSelectSuggestion(suggestion.title, result.content)
+        onSelectSuggestion(suggestion.title, result.content, result.excerpt, result.metaDescription, result.keywords)
         setIsOpen(false)
         toast({
           title: 'Sucesso',

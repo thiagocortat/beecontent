@@ -208,9 +208,9 @@ export default function EditorPage({ params }: EditorPageProps) {
         setPostData(prev => ({
           ...prev,
           content: result.content,
-          excerpt: result.excerpt || prev.excerpt,
-          metaDescription: result.metaDescription || prev.metaDescription,
-          keywords: result.keywords || prev.keywords
+          excerpt: result.excerpt || '',
+          metaDescription: result.metaDescription || '',
+          keywords: result.keywords || ''
         }))
         
         toast({

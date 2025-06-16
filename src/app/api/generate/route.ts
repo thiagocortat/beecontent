@@ -66,12 +66,14 @@ O artigo deve:
 - Incluir uma introdução envolvente e uma conclusão
 - Ser otimizado para SEO
 
-Formato de resposta:
-TÍTULO: [título otimizado]
-CONTEÚDO: [conteúdo completo em markdown]
-EXCERPT: [resumo de 2-3 frases]
-META_DESCRIPTION: [descrição de até 160 caracteres]
-KEYWORDS: [palavras-chave separadas por vírgula]
+Formato de resposta OBRIGATÓRIO (siga exatamente este formato):
+TÍTULO: [título otimizado para SEO]
+CONTEÚDO: [conteúdo completo em markdown com subtítulos]
+EXCERPT: [resumo atrativo de 2-3 frases que desperte curiosidade]
+META_DESCRIPTION: [descrição SEO de 120-160 caracteres que inclua palavras-chave]
+KEYWORDS: [5-8 palavras-chave relevantes separadas por vírgula]
+
+IMPORTANTE: Você DEVE gerar TODOS os campos acima. Não deixe nenhum campo vazio.
 `
 
     const completion = await groq.chat.completions.create({
@@ -98,10 +100,10 @@ KEYWORDS: [palavras-chave separadas por vírgula]
 
     // Parse the response
     const titleMatch = response.match(/TÍTULO:\s*(.+)/)
-    const contentMatch = response.match(/CONTEÚDO:\s*([\s\S]*?)(?=EXCERPT:|META_DESCRIPTION:|$)/)
-    const excerptMatch = response.match(/EXCERPT:\s*([\s\S]*?)(?=META_DESCRIPTION:|$)/)
-    const metaMatch = response.match(/META_DESCRIPTION:\s*(.+)/)
-    const keywordsMatch = response.match(/KEYWORDS:\s*(.+)/)
+    const contentMatch = response.match(/CONTEÚDO:\s*([\s\S]*?)(?=EXCERPT:|META_DESCRIPTION:|KEYWORDS:|$)/)
+    const excerptMatch = response.match(/EXCERPT:\s*([\s\S]*?)(?=META_DESCRIPTION:|KEYWORDS:|$)/)
+    const metaMatch = response.match(/META_DESCRIPTION:\s*([\s\S]*?)(?=KEYWORDS:|$)/)
+    const keywordsMatch = response.match(/KEYWORDS:\s*([\s\S]*?)$/)
 
     const generatedTitle = titleMatch?.[1]?.trim() || title
     const content = contentMatch?.[1]?.trim() || response
