@@ -1,5 +1,5 @@
-import { Sidebar } from '@/components/sidebar'
 import { Providers } from '@/components/providers'
+import { Sidebar } from '@/components/sidebar'
 
 export default function DashboardLayout({
   children,

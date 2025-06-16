@@ -20,6 +20,7 @@ import {
   FileText
 } from 'lucide-react'
 import { ImageUpload } from '@/components/ui/image-upload'
+import { ArticleSuggestionsModal } from '@/components/ui/article-suggestions-modal'
 
 interface PostData {
   title: string
@@ -200,6 +201,19 @@ export default function EditorPage() {
     }
   }
 
+  const handleSelectSuggestion = (title: string, content: string) => {
+    setPostData(prev => ({
+      ...prev,
+      title,
+      content
+    }))
+    
+    toast({
+      title: 'Sucesso',
+      description: 'Título e conteúdo preenchidos automaticamente!',
+    })
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -235,6 +249,11 @@ export default function EditorPage() {
         </div>
         
         <div className="flex items-center space-x-2">
+          <ArticleSuggestionsModal
+            onSelectSuggestion={handleSelectSuggestion}
+            disabled={isSaving || isGenerating}
+          />
+          
           <Button
             variant="outline"
             onClick={handleGenerateContent}

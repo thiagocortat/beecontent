@@ -16,15 +16,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email, password } = await request.json()
+    const { email, password, hotelId } = await request.json()
 
-    // Validações
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email e senha são obrigatórios' },
-        { status: 400 }
-      )
-    }
+  // Validação básica
+  if (!email || !password || hotelId === undefined || hotelId === null) {
+    return NextResponse.json(
+      { error: 'Email, senha e hotelId são obrigatórios' },
+      { status: 400 }
+    )
+  }
+
+  // Converter hotelId para number se necessário
+   const hotelIdNumber = typeof hotelId === 'string' ? parseInt(hotelId, 10) : hotelId
+   if (isNaN(hotelIdNumber)) {
+     return NextResponse.json(
+       { error: 'hotelId deve ser um número válido' },
+       { status: 400 }
+     )
+   }
 
     if (password.length < 6) {
       return NextResponse.json(
@@ -48,18 +57,38 @@ export async function POST(request: NextRequest) {
     // Hash da senha
     const hashedPassword = await bcrypt.hash(password, 12)
 
+    // Verificar se o hotel existe
+    const hotel = await prisma.hotel.findUnique({
+      where: { id: hotelIdNumber }
+    })
+
+    if (!hotel) {
+      return NextResponse.json(
+        { error: 'Hotel não encontrado' },
+        { status: 404 }
+      )
+    }
+
     // Criar o usuário
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
-        role: 'USER' // Por padrão, novos usuários são USER, não ADMIN
+        role: 'USER', // Por padrão, novos usuários são USER, não ADMIN
+        hotelId: hotelIdNumber
       },
       select: {
         id: true,
         email: true,
         role: true,
-        createdAt: true
+        hotelId: true,
+        createdAt: true,
+        hotel: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
       }
     })
 

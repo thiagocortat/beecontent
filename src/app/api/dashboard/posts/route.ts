@@ -14,11 +14,33 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Get user to check role and hotel
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email }
+    })
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Usuário não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    // Admin can see all posts, others only from their hotel
+    const whereClause = user.role === 'ADMIN' ? {} : { hotelId: user.hotelId }
+
     const posts = await prisma.post.findMany({
+      where: whereClause,
       include: {
         author: {
           select: {
             email: true
+          }
+        },
+        hotel: {
+          select: {
+            id: true,
+            name: true
           }
         }
       },

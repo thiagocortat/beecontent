@@ -17,7 +17,26 @@ model User {
   role      String   @default("EDITOR")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  hotelId   Int
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   posts     Post[]
+}
+
+model Hotel {
+  id           Int     @id @default(autoincrement())
+  chainId      Int
+  name         String
+  address      String
+  neighborhood String
+  city         String
+  state        String
+  country      String
+  latitude     Float?
+  longitude    Float?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  users        User[]
+  posts        Post[]
 }
 
 model Post {
@@ -35,6 +54,7 @@ model Post {
   updatedAt       DateTime  @updatedAt
   authorId        String
   author          User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  hotelId         Int
+  hotel           Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   tags            String?   // JSON string for tags
-  hotelId         String?   // For multi-tenant support
 }

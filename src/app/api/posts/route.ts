@@ -117,12 +117,19 @@ export async function POST(request: NextRequest) {
         keywords: keywords || '',
         featuredImage: featuredImage || null,
         status: status as PostStatus,
-        authorId: user.id
+        authorId: user.id,
+        hotelId: user.hotelId
       },
       include: {
         author: {
           select: {
             email: true
+          }
+        },
+        hotel: {
+          select: {
+            id: true,
+            name: true
           }
         }
       }

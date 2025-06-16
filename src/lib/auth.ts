@@ -24,10 +24,13 @@ export const authOptions: NextAuthOptions = {
           const user = await prisma.user.findUnique({
             where: {
               email: credentials.email
+            },
+            include: {
+              hotel: true
             }
           })
 
-          console.log('👤 User found:', user ? { id: user.id, email: user.email, role: user.role } : 'null')
+          console.log('👤 User found:', user ? { id: user.id, email: user.email, role: user.role, hotelId: user.hotelId } : 'null')
 
           if (!user) {
             console.log('❌ User not found')
@@ -51,6 +54,7 @@ export const authOptions: NextAuthOptions = {
             id: user.id,
             email: user.email,
             role: user.role,
+            hotelId: user.hotelId,
           }
         } catch (error) {
           console.error('💥 Auth error:', error)
@@ -66,6 +70,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role
+        token.hotelId = Number(user.hotelId)
       }
       return token
     },
@@ -73,6 +78,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.sub!
         session.user.role = token.role as string
+        session.user.hotelId = Number(token.hotelId)
       }
       return session
     }
