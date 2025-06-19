@@ -9,7 +9,7 @@ export async function GET(
     const { slug } = params
     console.log('API [slug] - Searching for slug:', slug)
 
-    const post = await prisma.post.findUnique({
+    const post = await prisma.post.findFirst({
       where: {
         slug,
         status: 'PUBLISHED'
